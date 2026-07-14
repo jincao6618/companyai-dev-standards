@@ -1,0 +1,11 @@
+# Dev-root standards repo.
+# This repo version-controls only the COMPANY-WIDE standards that live at the dev root
+# (root CLAUDE.md + docs/). Each tool subproject (siamhan_crm, gsa01-*, gsa02/03, …)
+# has its own git repo and lifecycle, so we ignore all top-level directories and then
+# re-include just docs/.
+/*/
+!docs/
+!docs/**
+
+.DS_Store
+*.log

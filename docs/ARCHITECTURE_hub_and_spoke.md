@@ -105,3 +105,14 @@ insert into route_rules(spoke,endpoint,match_kind,match_value,priority,fanout,no
 - [x] 身份共享：`sharing.*` + `crm_share_reader` FDW。
 - [ ] **route_rules 显式化**：把 gmail-inbound v4 里的隐式匹配，迁到本表驱动（hub 侧改动，
       需在 gsa01 库建表 + gmail-inbound 读表扇出）。本文 §3 为落地设计，待 hub 侧排期实施。
+
+## 7. 决策记录 (decisions)
+
+- **2026-07-15 · hub 暂留 GSA01，不迁不新建。** 现状：email 扫描/路由 hub 在 `gsa01-ops`，
+  CRM 作为 spoke 收扇出。评估过三条路：(A) 维持现状；(B) 把 hub 并入 CRM，CRM 成真正中心、
+  GSA 降为 spoke；(C) 独立中立 hub 项目，CRM/GSA 平级。
+  **结论：现阶段维持 (A)。** 两名合伙人、约两套系统的规模下，(C) 是最重的、只是"换个盒子"
+  并不消除"双中心"，(B) 才真正收敛但属较大有风险的联动迁移。现状唯一成本是"handoff 税"（改 hub
+  要跨会话协调 body_text / received_at / 分类器 / reply-send），成本可控且已用 handoff 文档承接。
+  **触发再评估的条件**：出现第 3 个 spoke，或跨会话协调开始明显拖累。届时优先选 (B) 并入 CRM，
+  而非 (C)。当前专注：用实盘数据修 CRM bug，系统稳定后再谈 hub 归并。
